@@ -41,13 +41,8 @@ export default class PubSubZeroMQAdapter implements NetAdapter {
     body: Input
   }): Promise<Response> {
     return new Promise(async (resolve, reject) => {
-      while (!(await this.sock.writable)) {
-        await new Promise(r => setTimeout(r, 10));
-      }
       await this.sock.send(["renew", JSON.stringify(context.body)])
-      setTimeout(() => {
-        resolve({ ok: true });
-      }, 500);
+      resolve({ ok: true });
     })
   }
 
@@ -61,13 +56,8 @@ export default class PubSubZeroMQAdapter implements NetAdapter {
     body: Input
   }): Promise<Response> {
     return new Promise(async (resolve, reject) => {
-      while (!(await this.sock.writable)) {
-        await new Promise(r => setTimeout(r, 10));
-      }
       await this.sock.send(["return", JSON.stringify(context.body)])
-      setTimeout(() => {
-        resolve({ ok: true });
-      }, 500);
+      resolve({ ok: true });
     })
   }
 }
