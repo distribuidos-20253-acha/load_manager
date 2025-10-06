@@ -4,6 +4,8 @@ import InputSchema from "./src/inputExecution/InputSchema.ts";
 import inputExecution from "./src/inputExecution/index.ts";
 import type { Input } from "./src/net/NetAdapter.ts";
 import { init, sock } from "./src/lib/ServerApp.ts";
+import colors from "chalk";
+import figlet from "figlet";
 
 program
   .option('-v, --verbose')
@@ -15,6 +17,12 @@ const {
   verbose: VERBOSE
 } = program.opts()
 config.VERBOSE = VERBOSE
+
+console.clear()
+console.log(
+  colors.red.bold(await figlet("LOAD_MANAGER")),
+  '\nv 0.0.1 -', colors.yellow('created by acha')
+)
 
 await init()
 

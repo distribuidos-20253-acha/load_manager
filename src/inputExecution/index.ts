@@ -16,11 +16,6 @@ const netCS: NetAdapter = new ClientZeroMQAdapter({
   port: process.env.ACTORS_CLIENT_SERVER_PORT!
 })
 
-console.log(
-  colors.red.bold(await figlet("LOAD_MANAGER")),
-  '\nv 0.0.1 -', colors.yellow('created by acha')
-)
-
 try {
   await netPUBSUB.init();
   await netCS.init();
