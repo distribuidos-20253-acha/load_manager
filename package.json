@@ -16,5 +16,8 @@
     "figlet": "^1.9.3",
     "zeromq": "^6.5.0",
     "zod": "^4.1.11"
+  },
+  "scripts": {
+    "start": "node index.ts"
   }
 }
