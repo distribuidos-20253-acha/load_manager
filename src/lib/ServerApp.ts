@@ -9,7 +9,7 @@ const [HOST, PORT] = [
 export const init = async () => {
   try {
     await sock.bind(`${HOST}:${PORT}`)
-    console.log("Connected to " + `${HOST}:${PORT}`)
+    console.log("Listening in " + `${HOST}:${PORT}`)
 
     setTimeout(async () => {
       await new Promise((resolve, reject) => {
