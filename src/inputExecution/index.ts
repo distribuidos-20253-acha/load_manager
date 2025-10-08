@@ -1,11 +1,10 @@
 import type NetAdapter from "../net/NetAdapter.ts"
 import ClientZeroMQAdapter from "../net/adapters/ClientZeroMQAdapter.ts"
 import PubSubZeroMQAdapter from "../net/adapters/PubSubZeroMQAdapter.ts"
-import type { Input } from "../net/NetAdapter.ts"
 import 'dotenv/config'
 import colors from 'chalk'
 import { sock } from "../lib/ServerApp.ts"
-import figlet from "figlet"
+import type { BibInput } from "../schemas/InputSchema.ts"
 
 const netPUBSUB: NetAdapter = new PubSubZeroMQAdapter({
   host: process.env.ACTORS_PUB_SUB_HOST!,
@@ -24,7 +23,7 @@ try {
 }
 
 export default async ({ body }: {
-  body: Input
+  body: BibInput
 }) => {
 
   process.stdout.write(`${colors.cyan(body.operation)} > ${colors.yellow('user:')} ${body.user_id} > ${colors.yellow(`${body.copy_id ? "copy_id" : "book_id"}:`)} ${body.copy_id ?? body.book_id}`);

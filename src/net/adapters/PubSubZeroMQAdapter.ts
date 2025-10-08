@@ -1,10 +1,10 @@
 // ODIO ZEROMQ <3
 
-import type { Input, Response } from "../NetAdapter.ts";
 import type NetAdapter from "../NetAdapter.ts";
 
 import * as zmq from "zeromq"
 import logVerbose from "../../utils/logVerbose.ts";
+import type { BibInput, BibResponse } from "../../schemas/InputSchema.ts";
 
 export default class PubSubZeroMQAdapter implements NetAdapter {
   private host: string;
@@ -38,8 +38,8 @@ export default class PubSubZeroMQAdapter implements NetAdapter {
   }
 
   sendRenew(context: {
-    body: Input
-  }): Promise<Response> {
+    body: BibInput
+  }): Promise<BibResponse> {
     return new Promise(async (resolve, reject) => {
       await this.sock.send(["renew", JSON.stringify(context.body)])
       resolve({ ok: true });
@@ -47,14 +47,14 @@ export default class PubSubZeroMQAdapter implements NetAdapter {
   }
 
   sendReserve(context: {
-    body: Input
-  }): Promise<Response> {
+    body: BibInput
+  }): Promise<BibResponse> {
     throw new Error("Operation Not supported")
   }
 
   async sendReturn(context: {
-    body: Input
-  }): Promise<Response> {
+    body: BibInput
+  }): Promise<BibResponse> {
     return new Promise(async (resolve, reject) => {
       await this.sock.send(["return", JSON.stringify(context.body)])
       resolve({ ok: true });
