@@ -43,11 +43,25 @@ export default class ClientZeroMQAdapter implements NetAdapter {
   sendReserve(context: {
     body: BibInput
   }): Promise<BibResponse> {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await this.sock.send(JSON.stringify(context.body))
+        const [result] = await this.sock.receive()
 
-      resolve({
-        ok: true
-      })
+        const parsedResult = JSON.parse(result as any)
+
+        if (!parsedResult.ok) {
+          throw new Error(parsedResult.msg)
+        }
+
+        resolve({ ok: true, body: parsedResult });
+      } catch (err) {
+        reject({
+          ok: false,
+          reason: err
+        })
+      }
+
     })
   }
 

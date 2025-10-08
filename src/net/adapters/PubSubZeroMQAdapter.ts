@@ -27,7 +27,7 @@ export default class PubSubZeroMQAdapter implements NetAdapter {
     return new Promise(async (resolve, reject) => {
       try {
         this.sock.bind(`${this.host}:${this.port}`)
-        logVerbose("Connected to " + `${this.host}:${this.port}`)
+        logVerbose("Binded to " + `${this.host}:${this.port}`)
         setTimeout(() => {
           resolve(true)
         }, 500);

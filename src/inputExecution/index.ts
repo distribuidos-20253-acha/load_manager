@@ -33,18 +33,20 @@ export default async ({ body }: {
 
   switch (body.operation) {
     case "renew":
-      // req = netPUBSUB.sendRenew({ body })
-      sock.send("OK");
+      await sock.send("OK");
+      req = netPUBSUB.sendRenew({ body })
       break;
     case "return":
-      // req = netPUBSUB.sendReturn({ body })
-      sock.send("OK");
+      await sock.send("OK");
+      req = netPUBSUB.sendReturn({ body })
       break;
 
     case "reserve":
-      // req = netCS.sendReserve({ body })
-      await req;
-      sock.send("OK");
+      req = netCS.sendReserve({ body })
+      const response = await req;
+
+      response.ok
+
       break;
   }
 
