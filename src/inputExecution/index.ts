@@ -45,7 +45,9 @@ export default async ({ body }: {
       req = netCS.sendReserve({ body })
       const response = await req;
 
-      response.ok
+      if (response.ok)
+        await sock.send("OK")
+      else await sock.send(`NO - ${response.body?.toString()}`)
 
       break;
   }
