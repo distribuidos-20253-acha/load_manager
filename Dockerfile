@@ -13,12 +13,5 @@ RUN npm install --production
 # Copy the rest of the project files
 COPY . .
 
-# Expose the port your app runs on
-ARG LOAD_MANAGER_PORT=3000
-ENV LOAD_MANAGER_PORT=$LOAD_MANAGER_PORT
-
-# Expone ese puerto
-EXPOSE $LOAD_MANAGER_PORT
-
-# Start the app
-CMD ["npm", "start"]
+# Esto hace que no sea un servicio, sino una app de docker
+ENTRYPOINT ["node", "index.ts"]

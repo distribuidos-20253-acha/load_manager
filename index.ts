@@ -20,7 +20,7 @@ config.VERBOSE = VERBOSE
 console.clear()
 console.log(
   colors.red.bold(await figlet("LOAD_MANAGER")),
-  '\nv 0.0.1 -', colors.yellow('created by acha')
+  '\nv 0.0.2 -', colors.yellow('created by acha')
 )
 
 await init()
