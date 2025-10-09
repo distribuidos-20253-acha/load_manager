@@ -1,4 +1,5 @@
 import * as zmq from "zeromq"
+import "dotenv/config"
 
 export const sock = new zmq.Reply()
 const [HOST, PORT] = [

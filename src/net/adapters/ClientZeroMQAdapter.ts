@@ -40,29 +40,24 @@ export default class ClientZeroMQAdapter implements NetAdapter {
     throw new Error("Operation Not supported")
   }
 
-  sendReserve(context: {
+  private resendBody(context: {
     body: BibInput
   }): Promise<BibResponse> {
     return new Promise(async (resolve, reject) => {
-      try {
-        await this.sock.send(JSON.stringify(context.body))
-        const [result] = await this.sock.receive()
+      await this.sock.send(JSON.stringify(context.body))
+      const [result] = await this.sock.receive()
 
-        const parsedResult = JSON.parse(result as any)
-
-        if (!parsedResult.ok) {
-          throw new Error(parsedResult.msg)
-        }
-
-        resolve({ ok: true, body: parsedResult });
-      } catch (err) {
-        reject({
-          ok: false,
-          reason: err
-        })
-      }
-
+      resolve({
+        ok: true,
+        body: result?.toString() ?? ""
+      })
     })
+  }
+
+  sendReserve(context: {
+    body: BibInput
+  }): Promise<BibResponse> {
+    return this.resendBody(context)
   }
 
   async sendReturn(context: {
