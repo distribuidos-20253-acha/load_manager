@@ -1,4 +1,4 @@
-import type { BibInput, BibResponse } from "../schemas/InputSchema";
+import type { BibInput, BibResponse } from "@acha/distribuidos/schemas/InputSchema";
 
 export default interface NetAdapter {
 

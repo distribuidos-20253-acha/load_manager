@@ -3,8 +3,8 @@
 import type NetAdapter from "../NetAdapter.ts";
 
 import * as zmq from "zeromq"
-import logVerbose from "../../utils/logVerbose.ts";
-import type { BibInput, BibResponse } from "../../schemas/InputSchema.ts";
+import { logVerbose, writeLogSync } from "@acha/distribuidos";
+import type { BibInput, BibResponse } from "@acha/distribuidos/schemas/InputSchema";
 
 export default class ClientZeroMQAdapter implements NetAdapter {
   private host: string;
@@ -17,6 +17,8 @@ export default class ClientZeroMQAdapter implements NetAdapter {
     this.sock = new zmq.Request()
     this.port = port;
     this.host = host;
+
+    writeLogSync(`ClientZeroMQAdapter (REQ/REP) Instantiated with params [host=${host}, port=${port}]`)
   }
 
   init(): Promise<boolean> {
@@ -24,6 +26,7 @@ export default class ClientZeroMQAdapter implements NetAdapter {
     return new Promise(async (resolve, reject) => {
       try {
         this.sock.connect(`${this.host}:${this.port}`)
+        writeLogSync(`ClientZeroMQAdapter connected [${this.host}:${this.port}]`)
         logVerbose("Connected to " + `${this.host}:${this.port}`)
         setTimeout(() => {
           resolve(true)
@@ -44,6 +47,21 @@ export default class ClientZeroMQAdapter implements NetAdapter {
     body: BibInput
   }): Promise<BibResponse> {
     return new Promise(async (resolve, reject) => {
+      let tries = 1;
+      while (!this.sock.writable) {
+        await (() => new Promise(resolveBussy => {
+          if (tries == 10) {
+            writeLogSync(`[ERROR] Cannot make request!!!!!!!!!!!`)
+            return;
+          }
+          writeLogSync(`Socked bussy, waiting for 100ms, [try=${tries}]`)
+          setTimeout(() => {
+            resolveBussy(true)
+          }, 100);
+          tries++;
+        }))()
+      }
+      writeLogSync("Sending...")
       await this.sock.send(JSON.stringify(context.body))
       const [result] = await this.sock.receive()
 

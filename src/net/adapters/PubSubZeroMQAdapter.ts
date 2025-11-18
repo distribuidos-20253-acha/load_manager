@@ -1,10 +1,10 @@
 // ODIO ZEROMQ <3
 
+import { logVerbose, writeLogSync } from "@acha/distribuidos";
 import type NetAdapter from "../NetAdapter.ts";
 
 import * as zmq from "zeromq"
-import logVerbose from "../../utils/logVerbose.ts";
-import type { BibInput, BibResponse } from "../../schemas/InputSchema.ts";
+import type { BibInput, BibResponse } from "@acha/distribuidos/schemas/InputSchema";
 
 export default class PubSubZeroMQAdapter implements NetAdapter {
   private host: string;
@@ -20,13 +20,16 @@ export default class PubSubZeroMQAdapter implements NetAdapter {
     this.sock.conflate = false
     this.port = port;
     this.host = host;
+
+    writeLogSync(`PubSubZeroMQAdapter (PUB/SUB) Instantiated with params [host=${host}, port=${port}]`)
   }
-
+  
   init(): Promise<boolean> {
-
+    
     return new Promise(async (resolve, reject) => {
       try {
         this.sock.bind(`${this.host}:${this.port}`)
+        writeLogSync(`PubSubZeroMQAdapter (PUB/SUB) binded [${this.host}:${this.port}]`)
         logVerbose("Binded to " + `${this.host}:${this.port}`)
         setTimeout(() => {
           resolve(true)
