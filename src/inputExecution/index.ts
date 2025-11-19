@@ -3,7 +3,7 @@ import ClientZeroMQAdapter from "../net/adapters/ClientZeroMQAdapter.ts"
 import PubSubZeroMQAdapter from "../net/adapters/PubSubZeroMQAdapter.ts"
 import 'dotenv/config'
 import colors from 'chalk'
-import { sock } from "../lib/ServerApp.ts"
+import { send, sock } from "../lib/ServerApp.ts"
 import type { BibInput } from "@acha/distribuidos/schemas/InputSchema"
 import { logVerbose, writeLog } from "@acha/distribuidos"
 
@@ -27,7 +27,7 @@ try {
   initStep++;
   await writeLog("Trying to init ClientZeroMQAdapter")
   await netCS.init();
-  await writeLog("Succesfully inited PubSubZeroMQAdapter")
+  await writeLog("Succesfully inited ClientZeroMQAdapter")
 } catch (err) {
   await writeLog(`Error Trying to init ${initStep == 2 ? "ClientZeroMQAdapter" : "PubSubZeroMQAdapter"}`)
   console.error(err)
@@ -46,25 +46,23 @@ export default async ({ body }: {
   switch (body.operation) {
     case "renew":
       req = netPUBSUB.sendRenew({ body })
-      await sock.send("OK");
+      await send({ ok: true })
       await writeLog(`Operation resolved to client`)
       break;
     case "return":
       req = netPUBSUB.sendReturn({ body })
-      await sock.send("OK");
+      await send({ ok: true })
       await writeLog(`Operation resolved to client`)
       break;
 
     case "reserve":
-      await writeLog(`I have to wait for an Actor Response`)
       req = netCS.sendReserve({ body })
       try {
-        // TODO: DESCOMENTAR ESTO
-        // const resp = await req;
-        const resp = { body: {} };
+        await writeLog(`I have to wait for an Actor Response`)
+        const resp = await req;
         await writeLog(`Response from Actor received`)
-        await writeLog(req);
-        await sock.send(JSON.stringify(resp.body));
+        await writeLog(resp);
+        await sock.send(JSON.stringify(resp))
         await writeLog(`Operation resolved to client`)
       } catch (err) {
         console.log(err)
@@ -74,8 +72,7 @@ export default async ({ body }: {
   }
 
   await writeLog("I'll wait if the request promise is not resolved")
-  // TODO: DESCOMENTAR ESTO
-  // await req;
+  await req;
   await writeLog("Request Promise resolved")
 
   process.stdout.write(colors.green('\x1b[4D done\n'));

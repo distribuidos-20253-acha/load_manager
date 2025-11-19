@@ -52,7 +52,10 @@ export default class ClientZeroMQAdapter implements NetAdapter {
         await (() => new Promise(resolveBussy => {
           if (tries == 10) {
             writeLogSync(`[ERROR] Cannot make request!!!!!!!!!!!`)
-            return;
+            return resolve({
+              ok: false,
+              body: "NO_CONNECTION"
+            })
           }
           writeLogSync(`Socked bussy, waiting for 100ms, [try=${tries}]`)
           setTimeout(() => {
@@ -65,10 +68,14 @@ export default class ClientZeroMQAdapter implements NetAdapter {
       await this.sock.send(JSON.stringify(context.body))
       const [result] = await this.sock.receive()
 
-      resolve({
-        ok: true,
-        body: result?.toString() ?? ""
-      })
+
+
+      if (!result) {
+        writeLogSync("RESULT EMPTY")
+        throw new Error("Result empty!")
+      }
+
+      resolve(JSON.parse(result?.toString()))
     })
   }
 

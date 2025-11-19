@@ -1,6 +1,7 @@
 import * as zmq from "zeromq"
 import "dotenv/config"
 import { writeLog, writeLogSync } from "@acha/distribuidos"
+import type { BibResponse } from "@acha/distribuidos/schemas/InputSchema"
 
 export const sock = new zmq.Reply()
 const [HOST, PORT] = [
@@ -15,12 +16,25 @@ export const init = async () => {
 
     setTimeout(async () => {
       await new Promise((resolve, reject) => {
-        resolve(true)
         writeLogSync(`Sock binded [${HOST}:${PORT}]`)
         console.log("Listening in " + `${HOST}:${PORT}`)
+        resolve(true)
       })
     }, 500);
   } catch (err) {
     console.log(err)
+  }
+}
+
+export const send = async (response: BibResponse) => {
+  await writeLog("Sending response to client")
+  await writeLog(response)
+
+  try {
+    await sock.send(JSON.stringify(response));
+    await writeLog("Response sent")
+  } catch (err) {
+    await writeLog(`Something bad happened trying to send the response, ${err?.toString()}`)
+    console.error(err)
   }
 }

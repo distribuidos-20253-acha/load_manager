@@ -18,7 +18,7 @@ const {
 } = program.opts()
 config.setVerbose(Boolean(VERBOSE));
 
-await showFigletTitle("load_manager")
+showFigletTitle("load_manager")
 
 await init()
 
