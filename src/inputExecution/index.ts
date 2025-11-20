@@ -5,13 +5,12 @@ import { writeLog } from "@acha/distribuidos"
 import ZMQAsyncRequest from "../net/ZMQAsyncPublisher.ts"
 import type { ZMQSender } from "@acha/distribuidos/zeromq/ZMQSender"
 import ZMQSyncRequest from "../net/ZMQSyncRequest.ts"
-import type { ZMQReceiver } from '@acha/distribuidos/zeromq/ZMQReceiver'
 import ZMQSyncReply from '../net/ZMQSyncReply.ts'
 
 export default async (op: BibOperation) => {
   const asyncActors: ZMQSender = ZMQAsyncRequest.getInstance()
   const syncActors: ZMQSender = ZMQSyncRequest.getInstance();
-  const replier: ZMQReceiver = ZMQSyncReply.getInstance();
+  const replier = ZMQSyncReply.getInstance();
 
   process.stdout.write(op.toString());
   process.stdout.write(`${colors.cyan(" ...")}`);
