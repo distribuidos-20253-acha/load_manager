@@ -21,7 +21,7 @@
     },
   },
   "packages": {
-    "@acha/distribuidos": ["@acha/distribuidos@file:../acha", { "dependencies": { "chalk": "^5.6.2", "figlet": "^1.9.4", "fs": "^0.0.1-security", "path": "^0.12.7", "zod": "^4.1.12" }, "devDependencies": { "@types/node": "^24.10.1" } }],
+    "@acha/distribuidos": ["@acha/distribuidos@file:../acha", { "dependencies": { "chalk": "^5.6.2", "figlet": "^1.9.4", "fs": "^0.0.1-security", "path": "^0.12.7", "zeromq": "^6.5.0", "zod": "^4.1.12" }, "devDependencies": { "@types/node": "^24.10.1" } }],
 
     "@types/bun": ["@types/bun@1.2.23", "", { "dependencies": { "bun-types": "1.2.23" } }, "sha512-le8ueOY5b6VKYf19xT3McVbXqLqmxzPXHsQT/q9JHgikJ2X22wyTW3g3ohz2ZMnp7dod6aduIiq8A14Xyimm0A=="],
 
