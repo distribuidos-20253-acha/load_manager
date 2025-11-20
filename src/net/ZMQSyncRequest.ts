@@ -5,7 +5,7 @@ export default class ZMQSyncRequest extends BaseZMQSyncRequest {
   protected override host = process.env.ACTORS_CLIENT_SERVER_HOST!;
   protected override port = process.env.ACTORS_CLIENT_SERVER_PORT!;
 
-  override sendReserve(context: { body: BibOperation; }): Promise<BibResponse> {
-    return super.resendBody(context)
+  override sendReserve(context: { body: BibOperation, timeout: number}): Promise<BibResponse> {
+    return super.resendBody({...context, timeout: 4500})
   }
 }
